@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSE 5335 P2</title>
+</head>
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#mybutton").click(function(){
+            $.get("/api/apidata",function(data){
+
+                console.log (data)
+                $.each(new Array(125),function(i){
+                    setTimeout(function () {
+
+
+                        $.get("/api/apidata/"+data[i].No,function(rowdata){
+                             var rowstr="<tr>"
+                             $.each(rowdata,function(key,value){
+                                 rowstr= rowstr + "<td>"+ value + "</td>"
+                             })
+
+                             rowstr=rowstr+"</td>"
+                            $("#datatable").append(rowstr)
+                            if ($("#datatable tr").length > 20)
+                                $("#datatable tr:eq(1)").remove()
+                         })
+                    },500*i)
+                })
+            })
+        })
+    })
+
+</script>
+<div>
+    <button type="button" id="mybutton">click here</button>
+</div>
+
+<div>
+    <table id="datatable" border="2px">
+    <tr><th>Number</th><th>Name</th><th>Passenger Class</th><th>Age</th><th>Gender</th><th>Alive</th><th>GenderCode</th></tr>
+    </table>
+
+</div>
+</body>
+</html>
