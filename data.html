@@ -3,6 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>CSE 5335 P2</title>
+    <style>
+    #mydiv{
+     animation-name: example;
+    animation-duration: 4s;
+    }
+    @keyframes example {
+        0% {
+            text-align: right;
+        }
+        25% {
+            text-align: left;
+        }
+    }
+    </style>
+
 </head>
 <body>
 
@@ -10,6 +25,7 @@
 <script>
     $(document).ready(function(){
         $("#mybutton").click(function(){
+            $("#mybutton").hide()
             $.get("/api/apidata",function(data){
 
                 console.log (data)
@@ -20,14 +36,21 @@
                         $.get("/api/apidata/"+data[i].No,function(rowdata){
                              var rowstr="<tr>"
                              $.each(rowdata,function(key,value){
-                                 rowstr= rowstr + "<td>"+ value + "</td>"
+                                 rowstr= rowstr + "<td animation='fadein'>"+ value + "</td>"
                              })
+                            r=$("#datatable tr").length
+                             rowstr=rowstr+"</tr>"
 
-                             rowstr=rowstr+"</td>"
-                            $("#datatable").append(rowstr)
-                            if ($("#datatable tr").length > 20)
+                            $("#datatable").append(rowstr);
+
+
+                            $("#datatable tr:eq("+r+")").hide()
+                            $("#datatable tr:eq("+r+")").fadeIn()
+
+                           if ($("#datatable tr").length > 20)
                                 $("#datatable tr:eq(1)").remove()
-                         })
+
+                        })
                     },500*i)
                 })
             })
@@ -39,11 +62,11 @@
     <button type="button" id="mybutton">click here</button>
 </div>
 
-<div>
+<div >
     <table id="datatable" border="2px">
-    <tr><th>Number</th><th>Name</th><th>Passenger Class</th><th>Age</th><th>Gender</th><th>Alive</th><th>GenderCode</th></tr>
-    </table>
 
+        <tr><th>Number</th><th>Name</th><th>Passenger Class</th><th>Age</th><th>Gender</th><th>Alive</th><th>GenderCode</th></tr>
+    </table>
 </div>
 </body>
 </html>
